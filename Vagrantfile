@@ -8,16 +8,29 @@
 Vagrant.configure("2") do |config|
 
   config.vm.define "jenkins" do |jenkins|
-    jenkins.vm.box = "x7warrior/ubuntu1404jenkins"
-    jenkins.vm.network "forwarded_port", guest: 8080, host: 4040
+    jenkins.vm.box = "thunamax_jenkins"
+    jenkins.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-65-x64-virtualbox-puppet.box"
+    # jenkins.vm.network "private_network", ip: "192.168.34.10"
     jenkins.vm.provision "shell", path: "bootstrap-jenkins.sh"
-    # jenkins.vm.network "private_network", ip: "192.168.33.10"
+    jenkins.vm.network "forwarded_port", guest: 8080, host: 4040
+
+    jenkins.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--ioapic", "on"]
+      vb.customize ["modifyvm", :id, "--memory", "2048"]
+      vb.customize ["modifyvm", :id, "--cpus", "2"]
+    end
   end
 
   config.vm.define "tests" do |tests|
     tests.vm.box = "ubuntu/trusty32"
     tests.vm.provision "shell", path: "bootstrap-tests.sh"
     # tests.vm.network "private_network", ip: "192.168.33.11"
+
+    tests.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--ioapic", "on"]
+      vb.customize ["modifyvm", :id, "--memory", "2048"]
+      vb.customize ["modifyvm", :id, "--cpus", "2"]
+    end
   end
 
   # Create a private network, which allows host-only access to the machine

@@ -1,4 +1,4 @@
-apt-get update && apt-get install \
+apt-get update && apt-get install -y \
     linux-image-extra-$(uname -r) \
     linux-image-extra-virtual \
     apt-transport-https \
@@ -13,4 +13,4 @@ add-apt-repository \
    stable"
 
 apt-get update
-apt-get install docker-ce
+apt-get install -y docker
