@@ -1,1 +1,1 @@
-/etc/init.d/jenkins start
+# service jenkins start
