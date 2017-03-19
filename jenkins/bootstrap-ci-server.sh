@@ -4,7 +4,8 @@ apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
-    software-properties-common
+    software-properties-common \
+    ansible
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository \
@@ -13,4 +14,10 @@ add-apt-repository \
    stable"
 
 apt-get update
-apt-get install -y docker
+apt-get install -y docker \
+  docker-ce
+
+docker build -t jenkins /vagrant/jenkins
+
+# Le port 8080 de la VM redirigera vers le port 8080 du container
+docker run --name="jenkins" -d -p 49001:8080 -v $PWD/jenkins:/var/jenkins_home:z -t jenkins

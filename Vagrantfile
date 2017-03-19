@@ -5,37 +5,33 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
+
 Vagrant.configure("2") do |config|
 
-  config.vm.define "jenkins" do |jenkins|
-    jenkins.vm.box = "ubuntu/trusty64"
-    jenkins.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
-    # jenkins.vm.network "private_network", ip: "192.168.34.10"
-    jenkins.vm.provision "shell", path: "bootstrap-jenkins.sh"
-    jenkins.vm.network "forwarded_port", guest: 8080, host: 4040
-
-    jenkins.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--ioapic", "on"]
-      vb.customize ["modifyvm", :id, "--memory", "2048"]
-      vb.customize ["modifyvm", :id, "--cpus", "2"]
-    end
-  end
-
-  config.vm.define "tests" do |tests|
-    tests.vm.box = "ubuntu/trusty32"
-    tests.vm.provision "shell", path: "bootstrap-tests.sh"
-    # tests.vm.network "private_network", ip: "192.168.33.11"
-
-    tests.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--ioapic", "on"]
-      vb.customize ["modifyvm", :id, "--memory", "2048"]
-      vb.customize ["modifyvm", :id, "--cpus", "2"]
-    end
-  end
+  # config.vm.define "jenkins" do |jenkins|
+  #   #Les paramètres de base de la box
+  #   jenkins.vm.box = "ubuntu/trusty64"
+  #   jenkins.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
+  #
+  #   jenkins.vm.network "private_network", ip: "192.168.33.10"
+  #
+  #   # La partie provisionning de la VM
+  #   jenkins.vm.provision "file", source: "jenkins/Dockerfile", destination: "/vagrant/Dockerfile"
+  #   jenkins.vm.provision "shell", path: "jenkins/bootstrap-ci-server.sh"
+  #
+  #   # Le forwarding de ports, ici on utilise le 4040 car le 8080 est fréquemment occupé par d'autres applications si l'on considère que le host est notre machine physique
+  #   jenkins.vm.network "forwarded_port", guest: 49001, host: 49001
+  #
+  #   jenkins.vm.provider :virtualbox do |vb|
+  #     vb.customize ["modifyvm", :id, "--ioapic", "on"]
+  #     vb.customize ["modifyvm", :id, "--memory", "2048"]
+  #     vb.customize ["modifyvm", :id, "--cpus", "2"]
+  #   end
+  # end
 
   config.vm.define "production" do |production|
-    production.vm.box = "ubuntu/trusty32"
-    production.vm.provision "shell", path: "bootstrap-production.sh"
+    production.vm.box = "ubuntu/trusty64"
+    production.vm.provision "shell", path: "production/bootstrap-production.sh"
     # tests.vm.network "private_network", ip: "192.168.33.11"
 
     production.vm.provider :virtualbox do |vb|
